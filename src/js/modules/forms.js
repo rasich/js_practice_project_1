@@ -1,13 +1,10 @@
-const forms = () => {
+import checkNumInputs from './checkNumInputs';
+
+const forms = (state) => {
   const form = document.querySelectorAll('form'),
-        inputs = document.querySelectorAll('input'),
-        phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+        inputs = document.querySelectorAll('input');
   
-  phoneInputs.forEach(item => {
-    item.addEventListener('input', () => {
-      item.value = item.value.replace(/\D/, '');
-    });
-  });
+  checkNumInputs('input[name="user_phone"]');  
   
   const message = {
     loading: 'Загрузка',
@@ -29,7 +26,7 @@ const forms = () => {
     inputs.forEach(item => {
       item.value = '';
     });
-  }
+  };
 
   form.forEach(item => {
     item.addEventListener('submit', (e) => {
@@ -40,6 +37,22 @@ const forms = () => {
       item.appendChild(statusMessage);
 
       const formData = new FormData(item);
+
+      if (item.getAttribute('data-calc') === 'end') {
+        if (!state.type) {
+          state.type = 'tree';
+        }
+        for (let key in state) {
+          formData.append(key, state[key]);
+          state[key] = '';
+        }
+        document.querySelectorAll('.checkbox').forEach(item => {
+          item.checked = false;
+        });
+        document.querySelectorAll('.form-control').forEach(item => {
+          item.value = 'tree';
+        });
+      }
       
       postData('assets/server.php', formData)
         .then(res => {
@@ -54,6 +67,10 @@ const forms = () => {
           }, 5000);
         });
 
+      setTimeout(() => {
+        document.querySelector('.popup_calc_end').style.display = 'none';
+        document.body.style.overflow = '';
+      }, 1500);
     });
   });
 };
