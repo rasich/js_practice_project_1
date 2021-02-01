@@ -3,12 +3,17 @@ const modals = () => {
     const trigger= document.querySelectorAll(triggerSelector),
           modal = document.querySelector(modalSelector),
           close = document.querySelector(closeSelector),
-          windows = document.querySelectorAll('[data-modal]');
+          windows = document.querySelectorAll('[data-modal]'),
+          scroll = calcScroll();
 
     function closeWindows() {
       windows.forEach(item => {
         item.style.display = 'none';
       });
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+      document.body.style.marginRight = `0px`;
+      
     }
     
     trigger.forEach(item => {
@@ -20,28 +25,23 @@ const modals = () => {
         closeWindows();
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
+        document.body.style.marginRight = `${scroll}px`;
       });
     });
 
     close.addEventListener('click', () => {
       closeWindows();
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
     });
 
     modal.addEventListener('click', (e) => {
       if (e.currentTarget === e.target && closeClickOverlay) {
         closeWindows();
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
       }
     });
 
     document.addEventListener('keydown', (e) => {
       if(e.keyCode == 27) {
         closeWindows();
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
       }
     }); 
   }
@@ -50,7 +50,25 @@ const modals = () => {
     setTimeout(function() {
       document.querySelector(selector).style.display = 'block';
       document.body.style.overflow = 'hidden';
+      document.body.style.marginRight = `${calcScroll()}px`;
     }, time);
+  }
+
+  function calcScroll() {
+    let div = document.createElement('div');
+
+    div.style.width = '50px';
+    div.style.height = '50px';
+    div.style.overflowY = 'scroll';
+    div.style.visibility = 'hidden';
+
+    document.body.appendChild(div);
+    let scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+
+    console.log(scrollWidth);
+
+    return scrollWidth;
   }
 
   bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
@@ -61,6 +79,7 @@ const modals = () => {
   bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false);
 
   // showModalByTime('.popup', 60000);
+  showModalByTime('.popup', 2000);
 };
 
 export default modals;

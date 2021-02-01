@@ -18056,11 +18056,12 @@ var images = function images() {
   var imgPopup = document.createElement('div'),
       workSection = document.querySelector('.works'),
       bigImage = document.createElement('img');
-  imgPopup.classList.add('popup');
+  imgPopup.classList.add('popup_img');
   workSection.appendChild(imgPopup);
   imgPopup.style.justifyContent = 'center';
   imgPopup.style.alignItems = 'center';
   imgPopup.style.display = 'none';
+  bigImage.style.cssText = "\n    max-width: 90%;\n    max-height: 90%;\n  ";
   imgPopup.appendChild(bigImage);
   workSection.addEventListener('click', function (e) {
     e.preventDefault();
@@ -18073,9 +18074,14 @@ var images = function images() {
       document.body.style.overflow = 'hidden';
     }
 
-    if (target && target.matches('div.popup')) {
+    if (target && target.matches('div.popup_img')) {
       imgPopup.style.display = 'none';
       document.body.style.overflow = '';
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.keyCode == 27) {
+      imgPopup.style.display = 'none';
     }
   });
 };
@@ -18103,12 +18109,16 @@ var modals = function modals() {
     var trigger = document.querySelectorAll(triggerSelector),
         modal = document.querySelector(modalSelector),
         close = document.querySelector(closeSelector),
-        windows = document.querySelectorAll('[data-modal]');
+        windows = document.querySelectorAll('[data-modal]'),
+        scroll = calcScroll();
 
     function closeWindows() {
       windows.forEach(function (item) {
         item.style.display = 'none';
       });
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+      document.body.style.marginRight = "0px";
     }
 
     trigger.forEach(function (item) {
@@ -18120,25 +18130,20 @@ var modals = function modals() {
         closeWindows();
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
+        document.body.style.marginRight = "".concat(scroll, "px");
       });
     });
     close.addEventListener('click', function () {
       closeWindows();
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
     });
     modal.addEventListener('click', function (e) {
       if (e.currentTarget === e.target && closeClickOverlay) {
         closeWindows();
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
       }
     });
     document.addEventListener('keydown', function (e) {
       if (e.keyCode == 27) {
         closeWindows();
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
       }
     });
   }
@@ -18147,7 +18152,21 @@ var modals = function modals() {
     setTimeout(function () {
       document.querySelector(selector).style.display = 'block';
       document.body.style.overflow = 'hidden';
+      document.body.style.marginRight = "".concat(calcScroll(), "px");
     }, time);
+  }
+
+  function calcScroll() {
+    var div = document.createElement('div');
+    div.style.width = '50px';
+    div.style.height = '50px';
+    div.style.overflowY = 'scroll';
+    div.style.visibility = 'hidden';
+    document.body.appendChild(div);
+    var scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    console.log(scrollWidth);
+    return scrollWidth;
   }
 
   bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
@@ -18155,6 +18174,8 @@ var modals = function modals() {
   bindModal('.glazing_price_btn', '.popup_calc', '.popup_calc_close');
   bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false);
   bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false); // showModalByTime('.popup', 60000);
+
+  showModalByTime('.popup', 2000);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
