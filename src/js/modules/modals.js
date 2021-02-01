@@ -66,8 +66,6 @@ const modals = () => {
     let scrollWidth = div.offsetWidth - div.clientWidth;
     div.remove();
 
-    console.log(scrollWidth);
-
     return scrollWidth;
   }
 
