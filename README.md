@@ -12,4 +12,4 @@
 * **[forms and calc](https://github.com/rasich/js_practice_project_1/commit/28b8ecc0a3fe442c253c0ff7e62d5c1214151615)** - реализован функционал формы-калькулятора с последующей отправкой всех введенных данных.
 * **[timer](https://github.com/rasich/js_practice_project_1/commit/0b4422dc327a4a647c43adbdaa67a4c808da91fc)** - реализован функционал таймера обратного отсчета.
 * **[images](https://github.com/rasich/js_practice_project_1/commit/02048bc80d46c45d21837138f245a9ddccd52b4b)** - реализован функционал увеличения изображений при клике на них.
-* **[bugfix](https://github.com/rasich/js_practice_project_1/commit/f9d89a889dc3af95c1b813f5ccf3e205429e6dee)** - дополнительные улучшения проекта.
+* **[bugfix](https://github.com/rasich/js_practice_project_1/commit/f9d89a889dc3af95c1b813f5ccf3e205429e6dee)** - дополнительные улучшения проекта (анимации, правильное поведение overflow при выхове модальных окон)
